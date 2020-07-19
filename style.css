@@ -64,13 +64,45 @@ body {
     height: 200px;
     display: flex;
     list-style: none;
-    margin: 0 0 30px 0;
+    margin: 69px 8px 44px 10px;
     padding: 30px 0 0 0;
-    font-family: sans-serif;
     font-size: 16px;
     line-height: 1;
     justify-content: space-around;
     align-items: flex-end;
     border-bottom:1px solid #000;
 }
+
+li {
+    color:#fff;
+    height: 25%;
+    display: inline-block;
+    background-color: #34495e;
+    height: 100%;
+    flex-grow: 1;
+    margin: 0 10px;
+    min-width: 30px;
+    max-width: 100px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    border: 1px solid rgba(0,0,0,0.4);
 }
+
+li::after {
+    content: attr(value);
+    color:black;
+    top: 100%;
+    margin-top: 10px;
+    position: absolute;
+}
+
+li::before {
+    content: attr(cur);
+    color:black;
+    bottom: 110%;
+    margin-top: 10px;
+    position: absolute;
+}
+
+

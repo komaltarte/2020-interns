@@ -1,32 +1,53 @@
-import {data} from './data.js'
-//import data from './data.json'
-console.log(data);
-/*let cur="INR";
-console.log(data[0].rates["2019-02-05"][cur]);
-*/
 let DOMstrings = {
 	plotBtn: '.btn',
 	taskType:'.task',
 	barchart: 'chart',
 	taskID:'task',
+	taskData: '.dataType',
+	taskDataID:'dataType',
 }
 
 
 let month="01";
-	let year="2019";
-	let day;
-	//let cur="INR";
-	let heights=[];// to store heights of inr bars.
-	let heightsg=[];// for gbp;
-	let x=2;
-	day="0"+x;
+let year="2019";
+let day;
+let heights=[];// to store heights of inr bars.
+let heightsg=[];// for gbp;
+let x=1;
+let dataSrc='';
+day="0"+x;
 
 
-//populations options with currency names:
-for (x in data[0].rates["2019-02-05"]) {
-	console.log(x);
+document.querySelector(DOMstrings.taskData).addEventListener('change', function() { 
+	dataSrc=document.querySelector(DOMstrings.taskData).value;
+	console.log(dataSrc);
+	async function getData() {
+ 		 let response = await fetch(dataSrc);
+ 		 let data = await response.json()
+ 		 return data;
+	}
+
+	getData()
+		.then(data => callf(data)); 
+});
+
+/*async function getData() {
+  let response = await fetch(dataSrc);
+  let data = await response.json()
+  return data;
+}
+
+getData()
+	.then(data => callf(data)); 
+*/
+
+
+function callf(data) {
+//populate options with currency names:
+for (x in data.rates["2019-02-05"]) {
+	//console.log(x);
 	let node = document.createElement("option");      
-	let textnode = document.createTextNode(x);        
+	let textnode = document.createTextNode("EUR vs "+x);        
 	node.appendChild(textnode); 
 	node.setAttribute("value",x);  
 	document.getElementById(DOMstrings.taskID).appendChild(node);
@@ -42,14 +63,19 @@ function clearGraph() {
 
 function plotGraph(cur) {
 	for(let i=1;i<=31;i++) {
-			day="0"+i;
-			if(data[0].rates.hasOwnProperty(year+"-"+month+"-"+day)) {
-				if(data[0].rates[year+"-"+month+"-"+day].hasOwnProperty(cur)) {
-					heights[i]=data[0].rates[year+"-"+month+"-"+day][cur];
+			if(i<10) {
+				day="0"+i;
+			}else {
+				day=i;
+			}
+			
+			if(data.rates.hasOwnProperty(year+"-"+month+"-"+day)) {
+				if(data.rates[year+"-"+month+"-"+day].hasOwnProperty(cur)) {
+					heights[i]=data.rates[year+"-"+month+"-"+day][cur];
 					console.log(heights[i]);
-					let node = document.createElement("LI");                 // Create a <li> node
-					let textnode = document.createTextNode(heights[i]);         // Create a text node
-					node.appendChild(textnode); // Append the text to <li>
+					let node = document.createElement("LI");                 
+					let textnode = document.createTextNode(Math.round(heights[i]*10)/10);         
+					node.appendChild(textnode); 
 					node.setAttribute("id", "bar"+day); 
 					node.setAttribute("value", year+"-"+month+"-"+day);  
 					node.setAttribute("cur", cur);                           
@@ -71,7 +97,8 @@ function plotGraph(cur) {
 		
 }
 
-document.querySelector(DOMstrings.plotBtn).addEventListener('click', function() {
+
+document.querySelector(DOMstrings.taskType).addEventListener('change', function() {
 	//1. clear graph.
 	clearGraph();
 	console.log("button clicked");
@@ -85,11 +112,15 @@ document.querySelector(DOMstrings.plotBtn).addEventListener('click', function() 
 	else if(task=="T2") {
 		//2. Plot graph
 		for(let i=1;i<=31;i++) {
-			day="0"+i;
-			if(data[0].rates.hasOwnProperty(year+"-"+month+"-"+day)) {
-				if(data[0].rates[year+"-"+month+"-"+day].hasOwnProperty("INR") && data[0].rates[year+"-"+month+"-"+day].hasOwnProperty("GBP")) {
-					heights[i]=data[0].rates[year+"-"+month+"-"+day].INR;
-					heightsg[i]=data[0].rates[year+"-"+month+"-"+day].GBP;
+			if(i<10) {
+				day="0"+i;
+			}else {
+				day=i;
+			}
+			if(data.rates.hasOwnProperty(year+"-"+month+"-"+day)) {
+				if(data.rates[year+"-"+month+"-"+day].hasOwnProperty("INR") && data.rates[year+"-"+month+"-"+day].hasOwnProperty("GBP")) {
+					heights[i]=data.rates[year+"-"+month+"-"+day].INR;
+					heightsg[i]=data.rates[year+"-"+month+"-"+day].GBP;
 					console.log(heights[i]);
 					console.log(heightsg[i]);
 					let node = document.createElement("LI");                 // Create a <li> node
@@ -131,3 +162,16 @@ document.querySelector(DOMstrings.plotBtn).addEventListener('click', function() 
 		plotGraph(task);
 	}
 });
+
+
+
+}
+
+
+
+
+//console.log(data);
+/*let cur="INR";
+console.log(data[0].rates["2019-02-05"][cur]);
+*/
+

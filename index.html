@@ -8,16 +8,21 @@
     
 </head>
 <body>
-		<select class="task" id="task">
-			<option value="T1">Task 1</option>
-			<option value="T2">Task 2</option>
-		</select>
+	<select class="dataType" id="dataType">
+		<option value="">Data src</option>
+		<option value="./data.json">data.json</option>
+		<option value="https://api.exchangeratesapi.io/history?start_at=2019-01-01&end_at=2019-01-31">REST API</option>
+	</select>
+	<select class="task" id="task">
+		<option value="">Select..</option>
+		<option value="T1">Task 1</option>
+		<option value="T2">Task 2</option>
+	</select>
 
-		<button class="btn"> PLOT </button>
+
 		<br>
 	<div class="wrapper clearfix">
-
-	
+		<br>
 		<ul class="bar-chart" id="chart">
 			
 		</ul>

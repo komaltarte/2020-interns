@@ -19,8 +19,6 @@ let x=1;
 let dataSrc='';
 day="0"+x;
 
-
-
 //get json data
 document.querySelector(DOMstrings.taskData).addEventListener('change', function() { 
 	dataSrc=document.querySelector(DOMstrings.taskData).value;

@@ -55,16 +55,8 @@ function clearGraph() {
 	}
 }
 
-function plotGraph(cur,fromMonth, fromDay, toMonth, toDay) {
-	for(let i=parseInt(fromDay);i<=31;i++) {
-			month=fromMonth;
-			if(i<10) {
-				day="0"+i;
-			}else {
-				day=i;
-			}
-			
-			if(data.rates.hasOwnProperty(year+"-"+month+"-"+day)) {
+function plotBar(i,cur,month,day) {
+	if(data.rates.hasOwnProperty(year+"-"+month+"-"+day)) {
 				if(data.rates[year+"-"+month+"-"+day].hasOwnProperty(cur)) {
 					heights[i]=data.rates[year+"-"+month+"-"+day][cur];
 					console.log(heights[i]);
@@ -92,46 +84,39 @@ function plotGraph(cur,fromMonth, fromDay, toMonth, toDay) {
 				heights[i]=-1;
 			}
 			x=x+1;
-		}
-		if(fromMonth!=toMonth) {
+}
 
-		for(let i=1;i<=parseInt(toDay);i++) {
-			month=toMonth;
+
+function plotGraph(cur,fromMonth, fromDay, toMonth, toDay) {
+	if(fromMonth>toMonth) {
+		alert("invalid range");
+	}
+	else if(fromMonth==""||toMonth==""){
+		alert("Please select date range");
+	}
+	console.log("in plot graph");
+	for(let i=parseInt(fromDay);i<=31;i++) {
+			month=fromMonth;
 			if(i<10) {
 				day="0"+i;
 			}else {
 				day=i;
 			}
+			plotBar(i,cur,month,day);
+	}
 			
-			if(data.rates.hasOwnProperty(year+"-"+month+"-"+day)) {
-				if(data.rates[year+"-"+month+"-"+day].hasOwnProperty(cur)) {
-					heights[i]=data.rates[year+"-"+month+"-"+day][cur];
-					console.log(heights[i]);
-					let node = document.createElement("LI");                 
-					let textnode = document.createTextNode(cur);         
-					node.appendChild(textnode); 
-					node.setAttribute("id", "bar"+day); 
-					node.setAttribute("date", year+"-"+month+"-"+day);  
-					node.setAttribute("val", Math.round(heights[i]*100)/100);                           
-					document.getElementById(DOMstrings.barchart).appendChild(node);
-					if(cur=="ISK"||cur=="HUF"||cur=="KRW") {
-						document.getElementById("bar"+day).style.height=heights[i]+"px";
-					}
-					else {
-						document.getElementById("bar"+day).style.height=heights[i]+"%";
-					}
+		if(fromMonth!=toMonth) {
 
-
+			for(let i=1;i<=parseInt(toDay);i++) {
+				month=toMonth;
+				if(i<10) {
+					day="0"+i;
+				}else {
+					day=i;
 				}
-				else {
-					heights[i]=-1;
-				}
-			}
-			else {
-				heights[i]=-1;
-			}
 			
-		}
+				plotBar(i,cur,month,day);			
+			}
 		}
 	
 		console.log(heights);
